@@ -481,7 +481,7 @@ class Runner:
             launcher=cfg.get('launcher', 'none'),
             env_cfg=cfg.get('env_cfg', dict(dist_cfg=dict(backend='nccl'))),
             log_processor=cfg.get('log_processor'),
-            log_level=cfg.get('log_level', 'INFO'),
+            log_level=cfg.get('log_level', 'CRITICAL'),
             visualizer=cfg.get('visualizer'),
             default_scope=cfg.get('default_scope', 'mmengine'),
             randomness=cfg.get('randomness', dict(seed=None)),
@@ -735,9 +735,10 @@ class Runner:
             MMLogger: A MMLogger object build from ``logger``.
         """
         if log_file is None:
-            log_file = osp.join(self._log_dir, f'{self.timestamp}.log')
-
-        log_cfg = dict(log_level=log_level, log_file=log_file, **kwargs)
+            # log_file = osp.join(self._log_dir, f'{self.timestamp}.log')
+            log_cfg = dict(log_level=log_level, **kwargs)
+        else:
+            log_cfg = dict(log_level=log_level, log_file=log_file, **kwargs)
         log_cfg.setdefault('name', self._experiment_name)
         # `torch.compile` in PyTorch 2.0 could close all user defined handlers
         # unexpectedly. Using file mode 'a' can help prevent abnormal
@@ -789,8 +790,7 @@ class Runner:
         if visualizer is None:
             visualizer = dict(
                 name=self._experiment_name,
-                vis_backends=[dict(type='LocalVisBackend')],
-                save_dir=self._log_dir)
+                vis_backends=[dict(type='LocalVisBackend')],)
             return Visualizer.get_instance(**visualizer)
 
         if isinstance(visualizer, Visualizer):
@@ -799,7 +799,7 @@ class Runner:
         if isinstance(visualizer, dict):
             # ensure visualizer containing name key
             visualizer.setdefault('name', self._experiment_name)
-            visualizer.setdefault('save_dir', self._log_dir)
+            # visualizer.setdefault('save_dir', self._log_dir)
             return VISUALIZERS.build(visualizer)
         else:
             raise TypeError(

@@ -444,8 +444,8 @@ class Runner:
         self.logger.info(f'Hooks will be executed in the following '
                          f'order:\n{self.get_hooks_info()}')
 
-        # dump `cfg` to `work_dir`
-        self.dump_config()
+        # # dump `cfg` to `work_dir`
+        # self.dump_config()
 
     @classmethod
     def from_cfg(cls, cfg: ConfigType) -> 'Runner':

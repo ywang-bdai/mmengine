@@ -107,10 +107,10 @@ def parse_requirements(fname='requirements/runtime.txt', with_version=True):
     return packages
 
 
-# if int(os.getenv('MMENGINE_LITE', '0')) == 1:
-#     install_requires = parse_requirements('requirements/runtime_lite.txt')
-# else:
-#     install_requires = parse_requirements()
+if int(os.getenv('MMENGINE_LITE', '0')) == 1:
+    install_requires = parse_requirements('requirements/runtime_lite.txt')
+else:
+    install_requires = parse_requirements()
 #     try:
 #         # OpenCV installed via conda.
 #         import cv2  # NOQA: F401
